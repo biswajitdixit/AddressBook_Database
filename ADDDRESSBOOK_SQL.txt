@@ -1,0 +1,474 @@
+-----------------------------------------------------------------------------Welcome to AddressBook System-------------------------------------------------------------
+#UC1-Ability to create addressbook service database
+---------------------------------------------------
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+mysql> create database AddressBookSystem;
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| addressbooksystem  |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+
+
+#UC2-Ability to create addressbook table
+----------------------------------------
+mysql> use addressbooksystem;
+Database changed
+mysql> create table addressbook(
+    -> firstname      varchar(30)     not null,
+    -> lastname       varchar(30)     not null,
+    -> address        varchar(150)    not null,
+    -> city           varchar(30)     not null,
+    -> state          varchar(30)     not null,
+    -> zip            varchar(6)      not null,
+    -> phonenumber    varchar(15)     not null,
+    -> email          varchar(30)     not null,
+    -> primary key    (firstname, lastname)
+    -> );
+
+mysql> desc addressbook;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| firstname   | varchar(30)  | NO   | PRI | NULL    |       |
+| lastname    | varchar(30)  | NO   | PRI | NULL    |       |
+| address     | varchar(150) | NO   |     | NULL    |       |
+| city        | varchar(30)  | NO   |     | NULL    |       |
+| state       | varchar(30)  | NO   |     | NULL    |       |
+| zip         | varchar(6)   | NO   |     | NULL    |       |
+| phonenumber | varchar(15)  | NO   |     | NULL    |       |
+| email       | varchar(30)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+#UC3-Ability to insert new contacts to addressbook
+--------------------------------------------------
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip,phonenumber, email) values
+    -> ('Biswa','dixit','Sector-4','rourkela','odisha','202020','2555662422','biswajitdixit7991@gmail.com'),
+    -> ('Bhushan','patil','jalgaon','pune','maharastra','202025','2542954569','bhshanpatil001@gmail.com'),
+    -> ('Chinmay','das','madhupur','jajpur','odisha','202124','02055426545','pupundas@gmail.com');
+mysql> select * from addressbook;
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city     | state      | zip    | phonenumber | email                       |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| Bhushan   | patil    | jalgaon  | pune     | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    |
+| Biswa     | dixit    | Sector-4 | rourkela | odisha     | 202020 | 2555662422  | biswajitdixit7991@gmail.com |
+| Chinmay   | das      | madhupur | jajpur   | odisha     | 202124 | 02055426545 | pupundas@gmail.com          |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+
+
+#UC4-Ability to edit existing contact person using there name
+-------------------------------------------------------------
+mysql> update addressbook set phonenumber = '6370360256' where firstname = 'Biswa' and lastname ='dixit';
+mysql> select * from addressbook;
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city     | state      | zip    | phonenumber | email                       |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| Bhushan   | patil    | jalgaon  | pune     | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    |
+| Biswa     | dixit    | Sector-4 | rourkela | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
+| Chinmay   | das      | madhupur | jajpur   | odisha     | 202124 | 02055426545 | pupundas@gmail.com          |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+
+#UC5-Ability to delete a person using person name.
+-------------------------------------------------
+mysql> delete from addressbook where firstname = 'Chinmay' and lastname = 'das';
+Query OK, 1 row affected (0.14 sec)
+
+mysql> select * from addressbook;
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city     | state      | zip    | phonenumber | email                       |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+| Bhushan   | patil    | jalgaon  | pune     | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    |
+| Biswa     | dixit    | Sector-4 | rourkela | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
++-----------+----------+----------+----------+------------+--------+-------------+-----------------------------+
+
+
+#UC6-Ability to retreive person belonging to a city or state.
+-------------------------------------------------------------
+mysql> select * from addressbook where city = 'rou' or state ='odisha';
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city     | state  | zip    | phonenumber | email                       |
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+| Biswa     | dixit    | Sector-4 | rourkela | odisha | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+mysql> select * from addressbook where city = 'pune';
++-----------+----------+---------+------+------------+--------+-------------+--------------------------+
+| firstname | lastname | address | city | state      | zip    | phonenumber | email                    |
++-----------+----------+---------+------+------------+--------+-------------+--------------------------+
+| Bhushan   | patil    | jalgaon | pune | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com |
++-----------+----------+---------+------+------------+--------+-------------+--------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from addressbook where state= 'odisha';
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city     | state  | zip    | phonenumber | email                       |
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+| Biswa     | dixit    | Sector-4 | rourkela | odisha | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
++-----------+----------+----------+----------+--------+--------+-------------+-----------------------------+
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip,phonenumber, email) values
+    -> ('Ashwini','konde','jalgaon','pune','maharastra','202545','5055894646','ashwini@4265@gmail.com'),
+    -> ('chandini','das','cuttuck','bhubaneswar','odisha','202450','25498763344','chand@gmail.com');
+mysql> select * from addressbook;
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city        | state      | zip    | phonenumber | email                       |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+| Ashwini   | konde    | jalgaon  | pune        | maharastra | 202545 | 5055894646  | ashwini@4265@gmail.com      |
+| Bhushan   | patil    | jalgaon  | pune        | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    |
+| Biswa     | dixit    | Sector-4 | rourkela    | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
+| chandini  | das      | cuttuck  | bhubaneswar | odisha     | 202450 | 25498763344 | chand@gmail.com             |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+4 rows in set (0.03 sec)
+
+
+#UC7-Ability to retrive size of addressbook by city or state.
+-------------------------------------------------------------
+mysql> select state,count(state) from addressbook group by state;
++------------+--------------+
+| state      | count(state) |
++------------+--------------+
+| maharastra |            2 |
+| odisha     |            2 |
++------------+--------------+
+mysql> select city,count(city) from addressbook group by city;
++-------------+-------------+
+| city        | count(city) |
++-------------+-------------+
+| pune        |           2 |
+| rourkela    |           1 |
+| bhubaneswar |           1 |
++-------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip,phonenumber, email) values
+    -> ('Samit','dhal','rengali','sambalpur','odisha','254599','64659989978','samit@gmail.com'),
+    -> ('Krishna','sethi','dadar','mumbai','maharastra','156985','94388942656','krshna@gmail.com'),
+    -> ('Babu','singh','jatani','bhbaneswar','odisha','769002','97539435','babu@gmail.com'),
+    -> ('Saumya','senapati','jatni','bhubaneswar','odisha','789023','798456132','senapati2gmail.com');
+
+mysql> select *  from addressbook;
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+| firstname | lastname | address  | city        | state      | zip    | phonenumber | email                       |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+| Ashwini   | konde    | jalgaon  | pune        | maharastra | 202545 | 5055894646  | ashwini@4265@gmail.com      |
+| Babu      | singh    | jatani   | bhbaneswar  | odisha     | 769002 | 97539435    | babu@gmail.com              |
+| Bhushan   | patil    | jalgaon  | pune        | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    |
+| Biswa     | dixit    | Sector-4 | rourkela    | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com |
+| chandini  | das      | cuttuck  | bhubaneswar | odisha     | 202450 | 25498763344 | chand@gmail.com             |
+| Krishna   | sethi    | dadar    | mumbai      | maharastra | 156985 | 94388942656 | krshna@gmail.com            |
+| Samit     | dhal     | rengali  | sambalpur   | odisha     | 254599 | 64659989978 | samit@gmail.com             |
+| Saumya    | senapati | jatni    | bhubaneswar | odisha     | 789023 | 798456132   | senapati2gmail.com          |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+
+
+
+#UC8-Ability to retrive entries sorted alphabatically by person name for a given city.
+-------------------------------------------------------------------------------------
+mysql> select * from addressbook where city = 'bhubaneswar' order by firstname asc;
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+| firstname | lastname | address | city        | state  | zip    | phonenumber | email              |
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+| chandini  | das      | cuttuck | bhubaneswar | odisha | 202450 | 25498763344 | chand@gmail.com    |
+| Saumya    | senapati | jatni   | bhubaneswar | odisha | 789023 | 798456132   | senapati2gmail.com |
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+
+
+#UC9-Ability to identify each addressbook with name and type.
+-------------------------------------------------------------
+mysql> alter table addressbook add addressbookname varchar(15);
+Query OK, 0 rows affected (1.70 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table addressbook add type varchar(15) ;
+Query OK, 0 rows affected (0.45 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc addressbook;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| firstname       | varchar(30)  | NO   | PRI | NULL    |       |
+| lastname        | varchar(30)  | NO   | PRI | NULL    |       |
+| address         | varchar(150) | NO   |     | NULL    |       |
+| city            | varchar(30)  | NO   |     | NULL    |       |
+| state           | varchar(30)  | NO   |     | NULL    |       |
+| zip             | varchar(6)   | NO   |     | NULL    |       |
+| phonenumber     | varchar(15)  | NO   |     | NULL    |       |
+| email           | varchar(30)  | NO   |     | NULL    |       |
+| addressbookname | varchar(15)  | YES  |     | NULL    |       |
+| type            | varchar(15)  | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+10 rows in set (0.08 sec)
+
+mysql> select * from addressbook;
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+------+
+| firstname | lastname | address  | city        | state      | zip    | phonenumber | email                       | addressbookname | type |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+------+
+| Ashwini   | konde    | jalgaon  | pune        | maharastra | 202545 | 5055894646  | ashwini@4265@gmail.com      | NULL            | NULL |
+| Babu      | singh    | jatani   | bhbaneswar  | odisha     | 769002 | 97539435    | babu@gmail.com              | NULL            | NULL |
+| Bhushan   | patil    | jalgaon  | pune        | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    | NULL            | NULL |
+| Biswa     | dixit    | Sector-4 | rourkela    | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com | NULL            | NULL |
+| chandini  | das      | cuttuck  | bhubaneswar | odisha     | 202450 | 25498763344 | chand@gmail.com             | NULL            | NULL |
+| Krishna   | sethi    | dadar    | mumbai      | maharastra | 156985 | 94388942656 | krshna@gmail.com            | NULL            | NULL |
+| Samit     | dhal     | rengali  | sambalpur   | odisha     | 254599 | 64659989978 | samit@gmail.com             | NULL            | NULL |
+| Saumya    | senapati | jatni    | bhubaneswar | odisha     | 789023 | 798456132   | senapati2gmail.com          | NULL            | NULL |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+------+
+mysql> update addressbook set addressbookname = 'data1' where firstname='Biswa';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update addressbook set type='family' where firstname='Biswa';
+
+mysql> select * from addressbook;
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+--------+
+| firstname | lastname | address  | city        | state      | zip    | phonenumber | email                       | addressbookname | type   |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+--------+
+| Ashwini   | konde    | jalgaon  | pune        | maharastra | 202545 | 5055894646  | ashwini@4265@gmail.com      | NULL            | NULL   |
+| Babu      | singh    | jatani   | bhbaneswar  | odisha     | 769002 | 97539435    | babu@gmail.com              | NULL            | NULL   |
+| Bhushan   | patil    | jalgaon  | pune        | maharastra | 202025 | 2542954569  | bhshanpatil001@gmail.com    | NULL            | NULL   |
+| Biswa     | dixit    | Sector-4 | rourkela    | odisha     | 202020 | 6370360256  | biswajitdixit7991@gmail.com | data1           | family |
+| chandini  | das      | cuttuck  | bhubaneswar | odisha     | 202450 | 25498763344 | chand@gmail.com             | NULL            | NULL   |
+| Krishna   | sethi    | dadar    | mumbai      | maharastra | 156985 | 94388942656 | krshna@gmail.com            | NULL            | NULL   |
+| Samit     | dhal     | rengali  | sambalpur   | odisha     | 254599 | 64659989978 | samit@gmail.com             | NULL            | NULL   |
+| Saumya    | senapati | jatni    | bhubaneswar | odisha     | 789023 | 798456132   | senapati2gmail.com          | NULL            | NULL   |
++-----------+----------+----------+-------------+------------+--------+-------------+-----------------------------+-----------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select count(type) from addressbook;
++-------------+
+| count(type) |
++-------------+
+|           1 |
++-------------+
+1 row in set (0.00 sec)
+
+
+#UC10-Ability to get number of contact person count by type.
+-----------------------------------------------------------
+mysql> select type, Count(firstName) from addressBook group by type;
++--------+------------------+
+| type   | Count(firstName) |
++--------+------------------+
+| NULL   |                7 |
+| family |                1 |
++--------+------------------+
+
+#UC11-Ability to add person to both friend and family
+------------------------------------------------------
+mysql> insert into addressbook values('Ashwini','konde','jalgaon','pune','maharastra','202545'
+     ->,'5055894646','ashwini@4265@gmail.com','null','friend');
+
+
+#UC12-Addressbook system ER Diagram implimentation
+---------------------------------------------------
+mysql>  create table contacts(
+    -> firstname varchar(30) not null,
+    -> lastname varchar(30) not null,
+    -> address varchar(150) not null,
+    -> phonenumber varchar(15) not null,
+    -> email varchar(30) not null,
+    -> primary key(firstname));
+mysql> desc contacts;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| firstname   | varchar(30)  | NO   | PRI | NULL    |       |
+| lastname    | varchar(30)  | NO   |     | NULL    |       |
+| address     | varchar(150) | NO   |     | NULL    |       |
+| phonenumber | varchar(15)  | NO   |     | NULL    |       |
+| email       | varchar(30)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+mysql> create table address (
+    -> zip varchar(6) not null,
+    -> city varchar(30) not null,
+    -> state varchar(30) not null,
+    -> primary key(zip));
+mysql> desc address;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| zip   | varchar(6)  | NO   | PRI | NULL    |       |
+| city  | varchar(30) | NO   |     | NULL    |       |
+| state | varchar(30) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+mysql> create table contacts_address(
+    -> firstname varchar(30) not null,
+    -> zip varchar(6) not null,
+    -> foreign key (firstname) references contacts(firstname),
+    -> foreign key (zip) references address(zip));
+mysql> desc contacts_address;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstname | varchar(30) | NO   | MUL | NULL    |       |
+| zip       | varchar(6)  | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+mysql> create table relations(
+    -> type varchar(15),
+    -> primary key(type));
+mysql> desc relations;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| type  | varchar(15) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+mysql> create table contacts_relation(
+    -> firstname varchar(30) not null,
+    -> type varchar(15),
+    -> foreign key(firstname) references contacts(firstname),
+    -> foreign key(type) references relations(type));
+mysql> desc contacts_relation;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstname | varchar(30) | NO   | MUL | NULL    |       |
+| type      | varchar(15) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+mysql> show tables;
++-----------------------------+
+| Tables_in_addressbooksystem |
++-----------------------------+
+| address                     |
+| addressbook                 |
+| contacts                    |
+| contacts_address            |
+| contacts_relation           |
+| relations                   |
++-----------------------------+
+mysql> insert into contacts values('Biswajit','Dixit','Sector-4','67239796','biswajit@gmail.com'),('Bhushan','patil','jalgaon','789456236','bhpatil@gmail.com'),('Saumya','senapati','lingarajvihar','789456123','saumy@gmail.com'),('Chinamy','das','madhapur','789453621','pupun@gmail.com');
+Query OK, 4 rows affected (0.22 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from contacts;
++-----------+----------+---------------+-------------+--------------------+
+| firstname | lastname | address       | phonenumber | email              |
++-----------+----------+---------------+-------------+--------------------+
+| Bhushan   | patil    | jalgaon       | 789456236   | bhpatil@gmail.com  |
+| Biswajit  | Dixit    | Sector-4      | 67239796    | biswajit@gmail.com |
+| Chinamy   | das      | madhapur      | 789453621   | pupun@gmail.com    |
+| Saumya    | senapati | lingarajvihar | 789456123   | saumy@gmail.com    |
++-----------+----------+---------------+-------------+--------------------+
+mysql> insert into address values('458015','pune','maharastra'),('769002','rourkela','odisha'),('750102','bhubaneswar','odisha'),('769001','rourkela','odisha');
+Query OK, 4 rows affected (0.16 sec)
+mysql> select * from address;
++--------+-------------+------------+
+| zip    | city        | state      |
++--------+-------------+------------+
+| 458015 | pune        | maharastra |
+| 750102 | bhubaneswar | odisha     |
+| 769001 | rourkela    | odisha     |
+| 769002 | rourkela    | odisha     |
++--------+-------------+------------+
+mysql> insert into contacts_address values('Biswajit','769002'),('Bhushan','458015'),('Saumya','750102'),('Chinamy','769001');
+mysql> select * from contacts_address;
++-----------+--------+
+| firstname | zip    |
++-----------+--------+
+| Biswajit  | 769002 |
+| Bhushan   | 458015 |
+| Saumya    | 750102 |
+| Chinamy   | 769001 |
++-----------+--------+
+
+mysql> insert into relations values('family'),('friend'),('work');
+Query OK, 3 rows affected (0.10 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from relations;
++--------+
+| type   |
++--------+
+| family |
+| friend |
+| work   |
++--------+
+mysql> insert into contacts_relation values('Biswajit','family'),('Bhushan','friend'),('Saumya','family'),('Chinamy','work');
+Query OK, 4 rows affected (0.35 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from contacts_relation;
++-----------+--------+
+| firstname | type   |
++-----------+--------+
+| Biswajit  | family |
+| Bhushan   | friend |
+| Saumya    | family |
+| Chinamy   | work   |
++-----------+--------+
+
+
+#UC13-Retrive all query 
+-----------------------
+UC6:--
+mysql> select contacts.firstname from contacts,contacts_address,address
+    -> where contacts.firstname = contacts_address.firstname and contacts_address.zip = address.zip and address.city ='rourkela';
++-----------+
+| firstname |
++-----------+
+| Chinamy   |
+| Biswajit  |
++-----------+
+mysql> select contacts.firstname from contacts,contacts_address,address
+    -> where contacts.firstname = contacts_address.firstname and contacts_address.zip = address.zip and address.state='odisha';
++-----------+
+| firstname |
++-----------+
+| Saumya    |
+| Chinamy   |
+| Biswajit  |
++-----------+
+
+UC7:--
+mysql>  select count(contacts.firstname) from contacts,contacts_address,address
+    -> where contacts.firstname = contacts_address.firstname and contacts_address.zip = address.zip and address.city = 'rourkela';
++---------------------------+
+| count(contacts.firstname) |
++---------------------------+
+|                         2 |
++---------------------------+
+mysql>  select count(contacts.firstname) from contacts,contacts_address,address
+    -> where contacts.firstname = contacts_address.firstname and contacts_address.zip = address.zip and address.state = 'odisha';
++---------------------------+
+| count(contacts.firstname) |
++---------------------------+
+|                         3 |
++---------------------------+
+
+
+UC8:--
+mysql> select contacts.firstname from contacts,contacts_address,address
+    ->  where contacts.firstname = contacts_address.firstname and contacts_address.zip = address.zip and address.city ='rourkela'
+    -> order by contacts.firstname;
++-----------+
+| firstname |
++-----------+
+| Biswajit  |
+| Chinamy   |
++-----------+
+
+UC10:--
+mysql> select type, Count(firstName) from contacts_relation group by type;
++--------+------------------+
+| type   | Count(firstName) |
++--------+------------------+
+| family |                2 |
+| friend |                1 |
+| work   |                1 |
++--------+------------------+
